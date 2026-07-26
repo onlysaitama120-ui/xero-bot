@@ -12,7 +12,175 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
+
+@bot.group(invoke_without_command=True)
+async def help(ctx):
+    embed = discord.Embed(
+        title="Xero Bot Commands",
+        description="Use `!help <command>` for more info on a command",
+        color=discord.Color.blurple()
+    )
+    embed.set_thumbnail(url=ctx.bot.user.avatar.url if ctx.bot.user.avatar else ctx.bot.user.default_avatar.url)
+    embed.add_field(name="Moderation", value="`ban` `kick` `unban` `mute` `unmute` `warn` `slowmode` `clear` `lock` `unlock`", inline=False)
+    embed.add_field(name="Fun", value="`8ball` `coinflip` `dice` `poll` `say`", inline=False)
+    embed.add_field(name="Utility", value="`userinfo` `serverinfo` `membercount` `avatar` `remind` `calc`", inline=False)
+    embed.add_field(name="Roles", value="`giverole` `removerole`", inline=False)
+    embed.add_field(name="Admin", value="`announce` `giveaway`", inline=False)
+    embed.set_footer(text="Xero Bot", icon_url=ctx.bot.user.avatar.url if ctx.bot.user.avatar else ctx.bot.user.default_avatar.url)
+    await ctx.send(embed=embed)
+
+@help.command(name="ban")
+async def help_ban(ctx):
+    embed = discord.Embed(title="!ban", description="Ban a member from the server", color=discord.Color.red())
+    embed.add_field(name="Usage", value="`!ban @user reason`", inline=False)
+    embed.add_field(name="Permission", value="Ban Members", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="kick")
+async def help_kick(ctx):
+    embed = discord.Embed(title="!kick", description="Kick a member from the server", color=discord.Color.red())
+    embed.add_field(name="Usage", value="`!kick @user reason`", inline=False)
+    embed.add_field(name="Permission", value="Kick Members", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="unban")
+async def help_unban(ctx):
+    embed = discord.Embed(title="!unban", description="Unban a user by username", color=discord.Color.red())
+    embed.add_field(name="Usage", value="`!unban username`", inline=False)
+    embed.add_field(name="Permission", value="Ban Members", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="mute")
+async def help_mute(ctx):
+    embed = discord.Embed(title="!mute", description="Timeout a member", color=discord.Color.orange())
+    embed.add_field(name="Usage", value="`!mute @user minutes`", inline=False)
+    embed.add_field(name="Permission", value="Moderate Members", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="unmute")
+async def help_unmute(ctx):
+    embed = discord.Embed(title="!unmute", description="Remove timeout from a member", color=discord.Color.orange())
+    embed.add_field(name="Usage", value="`!unmute @user`", inline=False)
+    embed.add_field(name="Permission", value="Moderate Members", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="warn")
+async def help_warn(ctx):
+    embed = discord.Embed(title="!warn", description="Warn a member", color=discord.Color.orange())
+    embed.add_field(name="Usage", value="`!warn @user reason`", inline=False)
+    embed.add_field(name="Permission", value="Manage Messages", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="clear")
+async def help_clear(ctx):
+    embed = discord.Embed(title="!clear", description="Bulk delete messages", color=discord.Color.orange())
+    embed.add_field(name="Usage", value="`!clear amount`", inline=False)
+    embed.add_field(name="Permission", value="Manage Messages", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="lock")
+async def help_lock(ctx):
+    embed = discord.Embed(title="!lock", description="Lock the current channel", color=discord.Color.orange())
+    embed.add_field(name="Usage", value="`!lock`", inline=False)
+    embed.add_field(name="Permission", value="Manage Channels", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="unlock")
+async def help_unlock(ctx):
+    embed = discord.Embed(title="!unlock", description="Unlock the current channel", color=discord.Color.orange())
+    embed.add_field(name="Usage", value="`!unlock`", inline=False)
+    embed.add_field(name="Permission", value="Manage Channels", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="8ball")
+async def help_8ball(ctx):
+    embed = discord.Embed(title="!8ball", description="Ask the magic 8ball a question", color=discord.Color.purple())
+    embed.add_field(name="Usage", value="`!8ball question`", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="coinflip")
+async def help_coinflip(ctx):
+    embed = discord.Embed(title="!coinflip", description="Flip a coin", color=discord.Color.purple())
+    embed.add_field(name="Usage", value="`!coinflip`", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="dice")
+async def help_dice(ctx):
+    embed = discord.Embed(title="!dice", description="Roll a dice", color=discord.Color.purple())
+    embed.add_field(name="Usage", value="`!dice`", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="poll")
+async def help_poll(ctx):
+    embed = discord.Embed(title="!poll", description="Create a yes/no poll", color=discord.Color.purple())
+    embed.add_field(name="Usage", value="`!poll question`", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="say")
+async def help_say(ctx):
+    embed = discord.Embed(title="!say", description="Make the bot say something", color=discord.Color.purple())
+    embed.add_field(name="Usage", value="`!say message`", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="userinfo")
+async def help_userinfo(ctx):
+    embed = discord.Embed(title="!userinfo", description="Get info about a member", color=discord.Color.blue())
+    embed.add_field(name="Usage", value="`!userinfo @user`", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="serverinfo")
+async def help_serverinfo(ctx):
+    embed = discord.Embed(title="!serverinfo", description="Get info about the server", color=discord.Color.blue())
+    embed.add_field(name="Usage", value="`!serverinfo`", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="avatar")
+async def help_avatar(ctx):
+    embed = discord.Embed(title="!avatar", description="Get a member's avatar", color=discord.Color.blue())
+    embed.add_field(name="Usage", value="`!avatar @user`", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="remind")
+async def help_remind(ctx):
+    embed = discord.Embed(title="!remind", description="Set a reminder", color=discord.Color.blue())
+    embed.add_field(name="Usage", value="`!remind minutes message`", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="calc")
+async def help_calc(ctx):
+    embed = discord.Embed(title="!calc", description="Calculate math", color=discord.Color.blue())
+    embed.add_field(name="Usage", value="`!calc 2+2`", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="giverole")
+async def help_giverole(ctx):
+    embed = discord.Embed(title="!giverole", description="Give a role to a member", color=discord.Color.green())
+    embed.add_field(name="Usage", value="`!giverole @user @role`", inline=False)
+    embed.add_field(name="Permission", value="Manage Roles", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="removerole")
+async def help_removerole(ctx):
+    embed = discord.Embed(title="!removerole", description="Remove a role from a member", color=discord.Color.green())
+    embed.add_field(name="Usage", value="`!removerole @user @role`", inline=False)
+    embed.add_field(name="Permission", value="Manage Roles", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="announce")
+async def help_announce(ctx):
+    embed = discord.Embed(title="!announce", description="Send an announcement embed", color=discord.Color.gold())
+    embed.add_field(name="Usage", value="`!announce message`", inline=False)
+    embed.add_field(name="Permission", value="Manage Messages", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(name="giveaway")
+async def help_giveaway(ctx):
+    embed = discord.Embed(title="!giveaway", description="Start a giveaway", color=discord.Color.gold())
+    embed.add_field(name="Usage", value="`!giveaway seconds prize`", inline=False)
+    embed.add_field(name="Example", value="`!giveaway 60 Nitro`", inline=False)
+    embed.add_field(name="Permission", value="Manage Messages", inline=False)
+    await ctx.send(embed=embed)
 
 # --- WELCOME MESSAGE ---
 @bot.event
