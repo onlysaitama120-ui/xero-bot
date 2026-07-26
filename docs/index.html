@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XERO BOT</title>
+<meta property="og:title" content="XERO BOT — Discord Bot">
+<meta property="og:description" content="Your all-in-one Discord bot. Moderation, fun, utility and more.">
+<meta property="og:image" content="https://media1.tenor.com/m/mVMExulai2IAAAAd/kaneki-tokyo-ghoul.gif">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --neon-pink:#ff2d95;
+  --neon-blue:#00f0ff;
+  --neon-purple:#b44dff;
+  --bg-dark:#0a0012;
+  --bg-card:rgba(15,5,30,0.85);
+  --text:#e0e0ff;
+  --text-dim:#7a7a9e;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Rajdhani',sans-serif;
+  background:var(--bg-dark);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* animated bg */
+.bg-grid{
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(180,77,255,0.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(180,77,255,0.06) 1px,transparent 1px);
+  background-size:60px 60px;
+  animation:gridMove 20s linear infinite;
+}
+@keyframes gridMove{0%{transform:translate(0,0)}100%{transform:translate(60px,60px)}}
+
+.bg-orb{
+  position:fixed;border-radius:50%;filter:blur(120px);z-index:0;pointer-events:none;
+}
+.orb1{width:500px;height:500px;background:rgba(255,45,149,0.12);top:-100px;left:-100px;animation:orbFloat 8s ease-in-out infinite}
+.orb2{width:400px;height:400px;background:rgba(0,240,255,0.1);bottom:-80px;right:-80px;animation:orbFloat 10s ease-in-out infinite reverse}
+.orb3{width:300px;height:300px;background:rgba(180,77,255,0.08);top:40%;left:50%;animation:orbFloat 12s ease-in-out infinite 2s}
+@keyframes orbFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-40px)}}
+
+/* scanline */
+.scanline{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);
+}
+
+/* main */
+.container{
+  position:relative;z-index:2;
+  max-width:900px;margin:0 auto;padding:40px 20px 60px;
+}
+
+/* hero */
+.hero{text-align:center;margin-bottom:50px}
+.avatar-wrap{
+  position:relative;display:inline-block;margin-bottom:24px;
+}
+.avatar-ring{
+  width:140px;height:140px;border-radius:50%;
+  background:conic-gradient(var(--neon-pink),var(--neon-blue),var(--neon-purple),var(--neon-pink));
+  padding:4px;
+  animation:ringRotate 4s linear infinite;
+  box-shadow:0 0 40px rgba(255,45,149,0.3),0 0 80px rgba(0,240,255,0.15);
+}
+@keyframes ringRotate{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}
+.avatar-ring img{
+  width:100%;height:100%;border-radius:50%;object-fit:cover;
+  border:3px solid var(--bg-dark);
+}
+.avatar-status{
+  position:absolute;bottom:8px;right:8px;
+  width:28px;height:28px;border-radius:50%;
+  background:#23a55a;border:4px solid var(--bg-dark);
+  box-shadow:0 0 12px rgba(35,165,90,0.6);
+}
+
+.hero h1{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(2rem,5vw,3.2rem);
+  font-weight:900;letter-spacing:4px;
+  background:linear-gradient(135deg,var(--neon-pink),var(--neon-blue),var(--neon-purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-shadow:none;
+  margin-bottom:6px;
+}
+.hero .tagline{
+  font-size:1.1rem;color:var(--text-dim);font-weight:400;letter-spacing:2px;
+}
+
+/* stat cards */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:48px}
+.stat-card{
+  background:var(--bg-card);
+  border:1px solid rgba(180,77,255,0.15);
+  border-radius:16px;padding:24px 16px;text-align:center;
+  backdrop-filter:blur(12px);
+  transition:all .3s ease;
+  position:relative;overflow:hidden;
+}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--neon-pink),var(--neon-blue),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.stat-card:hover::before{opacity:1}
+.stat-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(0,240,255,0.3);
+  box-shadow:0 8px 32px rgba(0,240,255,0.1);
+}
+.stat-icon{
+  font-size:1.6rem;margin-bottom:8px;
+  filter:drop-shadow(0 0 8px currentColor);
+}
+.stat-value{
+  font-family:'Orbitron',sans-serif;font-size:1.8rem;font-weight:700;
+  background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.stat-label{font-size:.85rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;margin-top:4px}
+
+/* action buttons */
+.actions{display:flex;gap:16px;justify-content:center;margin-bottom:56px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 32px;border-radius:12px;font-size:1rem;font-weight:600;
+  text-decoration:none;letter-spacing:1px;
+  font-family:'Rajdhani',sans-serif;
+  transition:all .3s ease;cursor:pointer;border:none;
+}
+.btn-invite{
+  background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));
+  color:#fff;
+  box-shadow:0 4px 24px rgba(255,45,149,0.3);
+}
+.btn-invite:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 32px rgba(255,45,149,0.5);
+}
+.btn-discord{
+  background:rgba(88,101,242,0.15);
+  border:1px solid rgba(88,101,242,0.4);
+  color:#5865f2;
+}
+.btn-discord:hover{
+  background:rgba(88,101,242,0.25);
+  transform:translateY(-3px);
+  box-shadow:0 8px 32px rgba(88,101,242,0.2);
+}
+
+/* commands */
+.commands-section{margin-bottom:48px}
+.section-title{
+  font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:700;
+  text-align:center;margin-bottom:28px;
+  color:var(--neon-blue);letter-spacing:3px;
+  text-shadow:0 0 20px rgba(0,240,255,0.3);
+}
+.cmd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.cmd-card{
+  background:var(--bg-card);
+  border:1px solid rgba(180,77,255,0.1);
+  border-radius:14px;padding:20px;
+  backdrop-filter:blur(12px);
+  transition:all .3s ease;
+}
+.cmd-card:hover{
+  border-color:rgba(255,45,149,0.3);
+  box-shadow:0 4px 24px rgba(255,45,149,0.08);
+  transform:translateY(-2px);
+}
+.cmd-cat{
+  font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:3px;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.cmd-cat .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cat-mod .dot{background:var(--neon-pink);box-shadow:0 0 8px var(--neon-pink)}
+.cat-mod{color:var(--neon-pink)}
+.cat-fun .dot{background:var(--neon-purple);box-shadow:0 0 8px var(--neon-purple)}
+.cat-fun{color:var(--neon-purple)}
+.cat-util .dot{background:var(--neon-blue);box-shadow:0 0 8px var(--neon-blue)}
+.cat-util{color:var(--neon-blue)}
+.cat-admin .dot{background:#f59e0b;box-shadow:0 0 8px #f59e0b}
+.cat-admin{color:#f59e0b}
+.cmd-list{
+  display:flex;flex-wrap:wrap;gap:6px;
+}
+.cmd-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.8rem;padding:5px 12px;border-radius:8px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+  color:var(--text-dim);
+  transition:all .2s;
+}
+.cmd-tag:hover{
+  background:rgba(180,77,255,0.1);
+  border-color:rgba(180,77,255,0.3);
+  color:var(--text);
+}
+
+/* features */
+.features{margin-bottom:48px}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.feat-card{
+  background:var(--bg-card);
+  border:1px solid rgba(180,77,255,0.08);
+  border-radius:12px;padding:18px;
+  text-align:center;
+  transition:all .3s;
+}
+.feat-card:hover{border-color:rgba(0,240,255,0.2);transform:translateY(-2px)}
+.feat-icon{font-size:1.6rem;margin-bottom:8px}
+.feat-name{font-weight:600;font-size:.95rem;margin-bottom:4px}
+.feat-desc{font-size:.8rem;color:var(--text-dim);line-height:1.4}
+
+/* footer */
+.footer{
+  text-align:center;padding:32px 0 0;
+  border-top:1px solid rgba(180,77,255,0.1);
+  color:var(--text-dim);font-size:.8rem;letter-spacing:1px;
+}
+.footer a{color:var(--neon-blue);text-decoration:none}
+.footer a:hover{text-shadow:0 0 12px var(--neon-blue)}
+
+/* responsive */
+@media(max-width:600px){
+  .stats{grid-template-columns:1fr}
+  .hero h1{font-size:1.8rem}
+  .actions{flex-direction:column;align-items:center}
+  .btn{width:100%;max-width:280px;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
+<div class="scanline"></div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="avatar-wrap">
+      <div class="avatar-ring">
+        <img src="https://cdn.discordapp.com/avatars/1530862362807443576/a5e50e6ff46e0e53e72a4b8e38b7a6e8.png?size=256" alt="XERO BOT" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%230a0012%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2260%22 text-anchor=%22middle%22 fill=%22%23b44dff%22 font-size=%2240%22 font-family=%22sans-serif%22>X</text></svg>'">
+      </div>
+      <div class="avatar-status"></div>
+    </div>
+    <h1>XERO BOT</h1>
+    <p class="tagline">Your all-in-one Discord bot</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-icon" style="color:var(--neon-pink)">Servers</div>
+      <div class="stat-value" id="stat-servers">--</div>
+      <div class="stat-label">Active Servers</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="color:var(--neon-blue)">Users</div>
+      <div class="stat-value" id="stat-users">--</div>
+      <div class="stat-label">Users Reached</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="color:var(--neon-purple)">Commands</div>
+      <div class="stat-value">20+</div>
+      <div class="stat-label">Available</div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <a class="btn btn-invite" href="https://discord.com/oauth2/authorize?client_id=1530862362807443576&permissions=8&scope=bot" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Invite Bot
+    </a>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features">
+    <div class="section-title">// Features</div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon">&#x1F6E1;</div>
+        <div class="feat-name">Moderation</div>
+        <div class="feat-desc">Ban, kick, mute, warn, slowmode & more</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#x1F3AE;</div>
+        <div class="feat-name">Fun</div>
+        <div class="feat-desc">8ball, coinflip, dice, polls</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#x1F527;</div>
+        <div class="feat-name">Utility</div>
+        <div class="feat-desc">UserInfo, ServerInfo, avatar, reminders</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#x1F389;</div>
+        <div class="feat-name">Giveaways</div>
+        <div class="feat-desc">Automated giveaway system</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#x1F4AC;</div>
+        <div class="feat-name">Welcome/Goodbye</div>
+        <div class="feat-desc">Auto greet and farewell messages</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#x26A1;</div>
+        <div class="feat-name">Fast & Reliable</div>
+        <div class="feat-desc">24/7 uptime with low latency</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMANDS -->
+  <div class="commands-section">
+    <div class="section-title">// Commands</div>
+    <div class="cmd-grid">
+
+      <div class="cmd-card">
+        <div class="cmd-cat cat-mod"><span class="dot"></span>Moderation</div>
+        <div class="cmd-list">
+          <span class="cmd-tag">!ban</span>
+          <span class="cmd-tag">!kick</span>
+          <span class="cmd-tag">!unban</span>
+          <span class="cmd-tag">!mute</span>
+          <span class="cmd-tag">!unmute</span>
+          <span class="cmd-tag">!warn</span>
+          <span class="cmd-tag">!slowmode</span>
+          <span class="cmd-tag">!clear</span>
+          <span class="cmd-tag">!lock</span>
+          <span class="cmd-tag">!unlock</span>
+        </div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-cat cat-fun"><span class="dot"></span>Fun</div>
+        <div class="cmd-list">
+          <span class="cmd-tag">!8ball</span>
+          <span class="cmd-tag">!coinflip</span>
+          <span class="cmd-tag">!dice</span>
+          <span class="cmd-tag">!poll</span>
+          <span class="cmd-tag">!say</span>
+        </div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-cat cat-util"><span class="dot"></span>Utility</div>
+        <div class="cmd-list">
+          <span class="cmd-tag">!userinfo</span>
+          <span class="cmd-tag">!serverinfo</span>
+          <span class="cmd-tag">!membercount</span>
+          <span class="cmd-tag">!avatar</span>
+          <span class="cmd-tag">!remind</span>
+          <span class="cmd-tag">!calc</span>
+          <span class="cmd-tag">!ping</span>
+          <span class="cmd-tag">!hello</span>
+        </div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-cat cat-admin"><span class="dot"></span>Admin</div>
+        <div class="cmd-list">
+          <span class="cmd-tag">!announce</span>
+          <span class="cmd-tag">!giveaway</span>
+          <span class="cmd-tag">!giverole</span>
+          <span class="cmd-tag">!removerole</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>XERO BOT &copy; 2026 &mdash; Made with &#x2764; and too much caffeine</p>
+  </div>
+
+</div>
+
+<script>
+// Animate stats on load
+function animateValue(el, start, end, duration) {
+  let startTime = null;
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    const p = Math.min((ts - startTime) / duration, 1);
+    el.textContent = Math.floor(p * (end - start) + start).toLocaleString();
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+window.addEventListener('load', () => {
+  animateValue(document.getElementById('stat-servers'), 0, 50, 1500);
+  animateValue(document.getElementById('stat-users'), 0, 1200, 1800);
+});
+
+// Glitch effect on hover
+document.querySelector('.hero h1').addEventListener('mouseenter', function() {
+  this.style.animation = 'none';
+  this.offsetHeight;
+  this.style.animation = 'glitch 0.3s ease';
+});
+
+// Inject glitch keyframes
+const style = document.createElement('style');
+style.textContent = `
+@keyframes glitch{
+  0%{transform:translate(0)}
+  20%{transform:translate(-3px,3px)}
+  40%{transform:translate(3px,-2px)}
+  60%{transform:translate(-2px,-3px)}
+  80%{transform:translate(2px,2px)}
+  100%{transform:translate(0)}
+}`;
+document.head.appendChild(style);
+</script>
+</body>
+</html>
