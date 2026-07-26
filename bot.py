@@ -71,7 +71,6 @@ async def help(ctx):
         BLURPLE
     )
     embed.set_thumbnail(url=ctx.bot.user.display_avatar.url)
-    embed.set_image(url="https://i.imgur.com/6BkCq2E.png")
     embed.add_field(name="MODERATION", value="```ban · kick · unban · mute · unmute · warn · slowmode · clear · lock · unlock```", inline=False)
     embed.add_field(name="FUN", value="```8ball · coinflip · dice · poll · say```", inline=False)
     embed.add_field(name="UTILITY", value="```userinfo · serverinfo · membercount · avatar · remind · calc · ping · hello```", inline=False)
@@ -297,7 +296,6 @@ async def on_member_join(member):
             SUCCESS
         )
         e.set_thumbnail(url=member.display_avatar.url)
-        e.set_image(url="https://i.imgur.com/6BkCq2E.png")
         e.set_footer(
             text=f"Joined {member.guild.name}",
             icon_url=member.guild.icon.url if member.guild.icon else None
