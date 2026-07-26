@@ -6,7 +6,9 @@ import os
 import platform
 import time
 
-token = os.environ["TOKEN"]
+token = os.environ.get("TOKEN")
+if not token:
+    raise RuntimeError("TOKEN environment variable is not set. Please set it in your hosting dashboard or .env file.")
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -449,7 +451,7 @@ async def say(ctx, *, message):
 async def userinfo(ctx, member: discord.Member = None):
     member = member or ctx.author
     roles = [role.mention for role in member.roles[1:]]
-    flags = [f.replace("_", " ").title() for f in member.public_flags.all()]
+    flags = [f.name.replace("_", " ").title() for f in member.public_flags.all()]
     e = make_embed(member.display_name, color=SUCCESS)
     e.set_thumbnail(url=member.display_avatar.url)
     e.add_field(name="Joined Server", value=f"<t:{int(member.joined_at.timestamp())}:R>", inline=True)
