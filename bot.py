@@ -71,7 +71,7 @@ async def help(ctx):
         BLURPLE
     )
     embed.set_thumbnail(url=ctx.bot.user.display_avatar.url)
-    embed.set_image(url="https://media1.tenor.com/m/mVMExulai2IAAAAd/kaneki-tokyo-ghoul.gif")
+    embed.set_image(url="https://c.tenor.com/mVMExulai2IAAAAd/tenor.gif")
     embed.add_field(name="MODERATION", value="```ban · kick · unban · mute · unmute · warn · slowmode · clear · lock · unlock```", inline=False)
     embed.add_field(name="FUN", value="```8ball · coinflip · dice · poll · say```", inline=False)
     embed.add_field(name="UTILITY", value="```userinfo · serverinfo · membercount · avatar · remind · calc · ping · hello```", inline=False)
@@ -297,7 +297,7 @@ async def on_member_join(member):
             SUCCESS
         )
         e.set_thumbnail(url=member.display_avatar.url)
-        e.set_image(url="https://media1.tenor.com/m/mVMExulai2IAAAAd/kaneki-tokyo-ghoul.gif")
+        e.set_image(url="https://c.tenor.com/mVMExulai2IAAAAd/tenor.gif")
         e.set_footer(
             text=f"Joined {member.guild.name}",
             icon_url=member.guild.icon.url if member.guild.icon else None
