@@ -42,10 +42,29 @@ pip install -r requirements.txt
 
 ### Configuration
 
-Create a `.env` file in the root directory:
+Set your bot token as an environment variable. The bot reads `TOKEN` from the environment.
+
+**Windows (PowerShell):**
+```powershell
+$env:TOKEN="your_bot_token_here"
+python bot.py
+```
+
+**Linux/Mac:**
+```bash
+export TOKEN="your_bot_token_here"
+python bot.py
+```
+
+Or use a `.env` file with `python-dotenv`:
+```bash
+pip install python-dotenv
+```
+Create `.env`:
 ```env
 TOKEN=your_bot_token_here
 ```
+And add `from dotenv import load_dotenv; load_dotenv()` at the top of `bot.py`.
 
 ### Run
 

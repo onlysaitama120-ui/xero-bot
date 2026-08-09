@@ -5,6 +5,7 @@ import asyncio
 import os
 import platform
 import time
+from datetime import datetime, timedelta
 
 token = os.environ.get("TOKEN")
 if not token:
@@ -366,7 +367,7 @@ async def kick(ctx, member: discord.Member, *, reason="No reason"):
 @bot.command()
 @commands.has_permissions(moderate_members=True)
 async def mute(ctx, member: discord.Member, minutes: int = 10):
-    await member.timeout(discord.utils.utcnow() + discord.timedelta(minutes=minutes))
+    await member.timeout(discord.utils.utcnow() + timedelta(minutes=minutes))
     e = make_embed("MUTED", f"{member.mention} has been muted for **{minutes} minutes**.", WARNING)
     e.set_thumbnail(url=member.display_avatar.url)
     e.set_footer(text=f"Muted by {ctx.author}", icon_url=ctx.author.display_avatar.url)
