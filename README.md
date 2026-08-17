@@ -5,6 +5,7 @@
 **Your all-in-one Discord bot — moderation, fun, utility & more**
 
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/oauth2/authorize?client_id=1530862362807443576&permissions=8&scope=bot)
+[![Live](https://img.shields.io/badge/Live_Demo-00C853?style=for-the-badge&logo=vercel&logoColor=white)](https://xero-bot-iota.vercel.app/)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](#)
 
@@ -25,6 +26,8 @@
 ## Preview
 
 ![Dashboard](https://onlysaitama120-ui.github.io/xero-bot/)
+
+**🌐 Live Preview:** [xero-bot-iota.vercel.app](https://xero-bot-iota.vercel.app/)
 
 ## Setup
 
